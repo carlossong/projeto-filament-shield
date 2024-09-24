@@ -71,7 +71,7 @@ class CustomerResource extends Resource
                                 $set('city', $data['municipio'] ?? null);
                                 $set('state', $data['uf'] ?? null);
                             })
-                    )
+                        )
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
@@ -79,8 +79,6 @@ class CustomerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->label('Telefone')
-                    ->mask('(99) 9999-9999')
-                    ->tel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
