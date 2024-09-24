@@ -29,6 +29,7 @@ class CustomerResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('document')
                     ->label('CPF/CNPJ')
+                    ->mask('99.999.999/9999-99')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
@@ -37,11 +38,11 @@ class CustomerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->label('Telefone')
+                    ->mask('(99) 9999-9999')
                     ->tel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
-                    ->label('E-Mail')
                     ->email()
                     ->required()
                     ->maxLength(255),
@@ -85,26 +86,36 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('document')
+                    ->label('CPF/CNPJ')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
+                ->label('Telefone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('zipcode')
+                    ->label('CEP')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('street')
+                    ->label('Endereço')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('number')
+                    ->label('Número')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('complement')
+                    ->label('Complemento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('neighborhood')
+                    ->label('bairro')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
+                    ->label('Cidade')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('state')
+                    ->label('Estado')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
