@@ -5,13 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
+use Exception;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Http;
 
 class CustomerResource extends Resource
 {
@@ -29,8 +34,44 @@ class CustomerResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('document')
                     ->label('CPF/CNPJ')
-                    ->mask('99.999.999/9999-99')
+                    // ->mask('99.999.999/9999-99')
                     ->required()
+                    ->suffixAction(
+                        Action::make('search')
+                            ->icon('heroicon-o-magnifying-glass')
+                            ->action(function(Set $set, $state){
+                                if (blank($state)) {
+                                    Notification::make()
+                                        ->title('Digite um CNPJ')
+                                        ->danger()->send();
+                                        return;
+                                }
+                                try {
+                                    $data = Http::get("https://www.receitaws.com.br/v1/cnpj/".$state)
+                                        ->throw()->json();
+
+                                        if(!empty($data['status'] == 'ERROR')) {
+                                            Notification::make()
+                                            ->title($data['message'])
+                                            ->danger()->send();
+                                        }
+                                } catch (Exception $e) {
+                                    Notification::make()
+                                        ->title('CNPJ não encontrado')
+                                        ->danger()->send();
+                                }
+                                $set('name', $data['nome'] ?? null);
+                                $set('email', $data['email'] ?? null);
+                                $set('phone', $data['telefone'] ?? null);
+                                $set('zipcode', $data['cep'] ?? null);
+                                $set('street', $data['logradouro'] ?? null);
+                                $set('number', $data['numero'] ?? null);
+                                $set('complement', $data['complemento'] ?? null);
+                                $set('neighborhood', $data['bairro'] ?? null);
+                                $set('city', $data['municipio'] ?? null);
+                                $set('state', $data['uf'] ?? null);
+                            })
+                    )
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
