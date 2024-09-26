@@ -88,7 +88,39 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('zipcode')
                     ->label('CEP')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->suffixAction(
+                        Action::make('search')
+                            ->icon('heroicon-o-magnifying-glass')
+                            ->action(function(Set $set, $state){
+                                if (blank($state)) {
+                                    Notification::make()
+                                        ->title('Digite o CEP')
+                                        ->danger()->send();
+                                        return;
+                                }
+                                try {
+                                    $cepData =
+                                        Http::get("https://viacep.com.br/ws/{$state}/json")
+                                        ->throw()->json();
+
+                                    // forçando a Exception
+                                    if (in_array('erro', $cepData)) {
+                                        throw new Exception('CEP não encontrado');
+                                    }
+
+                                } catch (Exception $e) {
+                                    Notification::make()
+                                        ->title('CEP não encontrado')
+                                        ->danger()->send();
+                                }
+
+                                $set('street', $cepData['logradouro'] ?? null);
+                                $set('neighborhood', $cepData['bairro'] ?? null);
+                                $set('city', $cepData['localidade'] ?? null);
+                                $set('uf', $cepData['uf'] ?? null);
+                            })
+                        ),
                 Forms\Components\TextInput::make('street')
                     ->label('Endereço')
                     ->required()
@@ -116,7 +148,8 @@ class CustomerResource extends Resource
                 Forms\Components\Toggle::make('status')
                     ->label('Ativo')
                     ->onColor('success')
-                    ->offColor('danger'),
+                    ->offColor('danger')
+                    ->default(true),
             ]);
     }
 
@@ -134,6 +167,7 @@ class CustomerResource extends Resource
                 ->label('TELEFONE')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('E-MAIL')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('zipcode')
                     ->label('CEP')
@@ -175,6 +209,7 @@ class CustomerResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
