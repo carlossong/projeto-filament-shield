@@ -106,7 +106,7 @@ class RoleResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -158,7 +158,7 @@ class RoleResource extends Resource implements HasShieldPermissions
     public static function getNavigationGroup(): ?string
     {
         return Utils::isResourceNavigationGroupEnabled()
-            ? __('Configurações')
+            ? __('filament-shield::filament-shield.nav.group')
             : '';
     }
 
