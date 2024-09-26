@@ -35,6 +35,7 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('document')
                     ->label('CPF/CNPJ')
                     ->mask('99.999.999/9999-99')
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->suffixAction(
                         Action::make('search')
