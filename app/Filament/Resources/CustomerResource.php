@@ -128,10 +128,10 @@ class CustomerResource extends Resource
                     ->label('CPF/CNPJ')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nome')
+                    ->label('NOME')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
-                ->label('Telefone')
+                ->label('TELEFONE')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
@@ -139,22 +139,22 @@ class CustomerResource extends Resource
                     ->label('CEP')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('street')
-                    ->label('Endereço')
+                    ->label('ENDEREÇO')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('number')
-                    ->label('Número')
+                    ->label('NÚMERO')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('complement')
-                    ->label('Complemento')
+                    ->label('COMPLEMENTO')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('neighborhood')
-                    ->label('Bairro')
+                    ->label('BAIRRO')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
-                    ->label('Cidade')
+                    ->label('CIDADE')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('state')
-                    ->label('Estado')
+                    ->label('ESTADO')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
