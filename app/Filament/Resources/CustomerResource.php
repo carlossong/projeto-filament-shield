@@ -34,7 +34,7 @@ class CustomerResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('document')
                     ->label('CPF/CNPJ')
-                    // ->mask('99.999.999/9999-99')
+                    ->mask('99.999.999/9999-99')
                     ->required()
                     ->suffixAction(
                         Action::make('search')
@@ -47,9 +47,11 @@ class CustomerResource extends Resource
                                         return;
                                 }
                                 try {
+                                    $state = str_replace("-", "", $state);
+                                    $state = str_replace(".", "", $state);
+                                    $state = str_replace("/", "", $state);
                                     $data = Http::get("https://www.receitaws.com.br/v1/cnpj/".$state)
                                         ->throw()->json();
-
                                         if(!empty($data['status'] == 'ERROR')) {
                                             Notification::make()
                                             ->title($data['message'])
@@ -115,12 +117,12 @@ class CustomerResource extends Resource
                                         ->danger()->send();
                                 }
 
-                            $set('street', $cepData['logradouro'] ?? null);
-                            $set('neighborhood', $cepData['bairro'] ?? null);
-                            $set('city', $cepData['localidade'] ?? null);
-                            $set('uf', $cepData['uf'] ?? null);
-                        })
-                    ),
+                                $set('street', $cepData['logradouro'] ?? null);
+                                $set('neighborhood', $cepData['bairro'] ?? null);
+                                $set('city', $cepData['localidade'] ?? null);
+                                $set('uf', $cepData['uf'] ?? null);
+                            })
+                        ),
                 Forms\Components\TextInput::make('street')
                     ->label('Endereço')
                     ->required()
@@ -157,6 +159,9 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\IconColumn::make('status')
+                    ->label('')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('document')
                     ->label('CPF/CNPJ')
                     ->searchable(),
@@ -197,8 +202,6 @@ class CustomerResource extends Resource
                     ->label('ESTADO')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\IconColumn::make('status')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -244,5 +247,10 @@ class CustomerResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string)static::getModel()::count();
     }
 }
