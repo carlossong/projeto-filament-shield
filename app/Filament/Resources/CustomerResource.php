@@ -115,12 +115,12 @@ class CustomerResource extends Resource
                                         ->danger()->send();
                                 }
 
-                                $set('street', $cepData['logradouro'] ?? null);
-                                $set('neighborhood', $cepData['bairro'] ?? null);
-                                $set('city', $cepData['localidade'] ?? null);
-                                $set('uf', $cepData['uf'] ?? null);
-                            })
-                        ),
+                            $set('street', $cepData['logradouro'] ?? null);
+                            $set('neighborhood', $cepData['bairro'] ?? null);
+                            $set('city', $cepData['localidade'] ?? null);
+                            $set('uf', $cepData['uf'] ?? null);
+                        })
+                    ),
                 Forms\Components\TextInput::make('street')
                     ->label('Endereço')
                     ->required()
