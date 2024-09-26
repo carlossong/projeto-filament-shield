@@ -148,7 +148,7 @@ class CustomerResource extends Resource
                     ->label('Complemento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('neighborhood')
-                    ->label('bairro')
+                    ->label('Bairro')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
                     ->label('Cidade')
