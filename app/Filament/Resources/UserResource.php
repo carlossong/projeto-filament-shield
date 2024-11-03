@@ -47,6 +47,7 @@ class UserResource extends Resource
                 Forms\Components\CheckboxList::make('roles')
                     ->relationship('roles', 'name')
                     ->label('Funções')
+                    ->visible(fn () => auth()->user()->can('view_shield::role'))
             ]);
     }
 

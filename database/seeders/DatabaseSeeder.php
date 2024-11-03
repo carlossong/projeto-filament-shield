@@ -13,15 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create([
+        $this->call([
+            ShieldSeeder::class,
+        ]);
+
+        User::factory()->create([
             'name' => 'José Carlos',
             'email' => 'admin@admin.com',
             'password' => bcrypt('123Mudar'),
             'email_verified_at' => now(),
-        ]);
-
-        $this->call([
-            ShieldSeeder::class,
         ]);
     }
 }
